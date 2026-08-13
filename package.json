@@ -1,0 +1,1 @@
+{"scripts":{"dev":"python3 -m http.server 5173 -d frontend","build":"node frontend/validate.mjs","seed":"python3 backend/app/seed.py","test":"PYTHONPATH=backend pytest -q backend/app/tests"},"dependencies":{},"devDependencies":{}}

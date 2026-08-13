@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: limpeza
+      POSTGRES_USER: limpeza
+      POSTGRES_PASSWORD: limpeza
+    ports: ['5432:5432']
+    volumes: [pgdata:/var/lib/postgresql/data]
+  backend:
+    build: ./backend
+    env_file: .env.example
+    ports: ['8000:8000']
+    depends_on: [postgres]
+    command: sh -c "alembic upgrade head && python -m app.seed && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+  frontend:
+    image: python:3.12-slim
+    working_dir: /app
+    volumes: ['./frontend:/app:ro']
+    ports: ['5173:5173']
+    command: python -m http.server 5173
+    depends_on: [backend]
+volumes: {pgdata: {}}
